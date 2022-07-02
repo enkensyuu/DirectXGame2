@@ -11,7 +11,6 @@
 #include "WorldTransform.h"
 #include <DirectXMath.h>
 #include"DebugCamera.h"
-#include"Player.h"
 
 /// <summary>
 /// ゲームシーン
@@ -70,17 +69,18 @@ private: // メンバ変数
 		kNumPartId
 	};
 
+	// ワールドトランスフォーム
+	WorldTransform worldTransforms_[kNumPartId];
+
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
 
 	// デバッグカメラの生成
-	//DebugCamera* debugCamera_ = nullptr;
+	DebugCamera* debugCamera_ = nullptr;
 
 	// カメラ上方向の角度
 	float viewAngle = 0.0f;
 
-	// 自キャラ
-	Player* player_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
