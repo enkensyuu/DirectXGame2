@@ -1,30 +1,6 @@
 #include"Player.h"
 #include <cassert>
-
-Matrix4 Mat_Identity()
-{
-	//単位行列
-	Matrix4 matIdentity;
-	matIdentity.m[0][0] = 1;
-	matIdentity.m[1][1] = 1;
-	matIdentity.m[2][2] = 1;
-	matIdentity.m[3][3] = 1;
-
-	return matIdentity;
-}
-
-Matrix4 Mat_Translation(Vector3 translation)
-{
-	//平行移動行列を宣言
-	Matrix4 matTrans = MathUtility::Matrix4Identity();
-
-	matTrans.m[3][0] = translation.x;
-	matTrans.m[3][1] = translation.y;
-	matTrans.m[3][2] = translation.z;
-	matTrans.m[3][3] = 1;
-
-	return matTrans;
-}
+#include"Procession.h"
 
 void Player::Initialize(Model* model, uint32_t textuerhandle)
 {
@@ -43,6 +19,9 @@ void Player::Initialize(Model* model, uint32_t textuerhandle)
 
 void Player::Update()
 {
+	// 旋回処理
+	Rotate();
+
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0,0,0 };
 
@@ -80,16 +59,57 @@ void Player::Update()
 
 	// 行列更新
 	worldTransform_.matWorld_ = Mat_Identity();
-	worldTransform_.matWorld_ *= Mat_Translation(worldTransform_.translation_);
-
+	worldTransform_.matWorld_ = MatWorld(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	worldTransform_.TransferMatrix();
 
 	// デバッグ用表示
 	debugText_->SetPos(50, 50);
 	debugText_->Printf("Player:(%f,%f,%f)", worldTransform_.translation_.x, worldTransform_.translation_.y, worldTransform_.translation_.z);
+
+	// キャラクター攻撃処理
+	Attack();
+
+	// 弾更新
+	if (bullet_)
+	{
+		bullet_->Update();
+	}
 }
 
-void Player::Draw(ViewProjection& viewProjection_)
+void Player::Draw(ViewProjection& viewProjection)
 {
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+
+	// 弾描画
+	if (bullet_)
+	{
+		bullet_->Draw(viewProjection);
+	}
+}
+
+void Player::Rotate()
+{
+	const float kRotateSpeed = 0.2f;
+
+	if (input_->PushKey(DIK_U))
+	{
+		worldTransform_.rotation_.y -= kRotateSpeed;
+	}
+	else if (input_->PushKey(DIK_I))
+	{
+		worldTransform_.rotation_.y += kRotateSpeed;
+	}
+}
+
+void Player::Attack()
+{
+	if (input_->PushKey(DIK_SPACE))
+	{
+		// 弾を生成し、初期化
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_);
+
+		// 弾を登録する
+		bullet_ = newBullet;
+	}
 }

@@ -4,6 +4,7 @@
 #include "Input.h"
 #include"ViewProjection.h"
 #include "DebugText.h"
+#include"PlayerBullet.h"
 
 /// <summary>
 /// 自キャラ
@@ -27,7 +28,14 @@ public:
 	///描画
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション(参照渡し)</param>
-	void Draw(ViewProjection&viewProjection_);
+	void Draw(ViewProjection& viewProjection_);
+
+	void Rotate();
+
+	/// <summary>
+	/// 攻撃
+	/// </summary>
+	void Attack();
 
 private:
 	Input* input_ = nullptr;
@@ -41,4 +49,7 @@ private:
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+
+	// 弾
+	PlayerBullet* bullet_ = nullptr;
 };
