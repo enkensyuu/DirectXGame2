@@ -88,3 +88,21 @@ Matrix4 MatWorld(Vector3& scale, Vector3& rotation, Vector3& translation)
 
 	return procession;
 }
+
+Vector3 Mat_Velocity(Vector3 velocity, Matrix4 matWorld)
+{
+	Vector3 matvelocity;
+	matvelocity.x += matWorld.m[0][0] * velocity.x;
+	matvelocity.x += matWorld.m[1][0] * velocity.y;
+	matvelocity.x += matWorld.m[2][0] * velocity.z;
+
+	matvelocity.y += matWorld.m[0][1] * velocity.x;
+	matvelocity.y += matWorld.m[1][1] * velocity.y;
+	matvelocity.y += matWorld.m[2][1] * velocity.z;
+
+	matvelocity.z += matWorld.m[0][2] * velocity.x;
+	matvelocity.z += matWorld.m[1][2] * velocity.y;
+	matvelocity.z += matWorld.m[2][2] * velocity.z;
+
+	return matvelocity;
+}
