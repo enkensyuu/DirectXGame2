@@ -338,7 +338,6 @@ void GameScene::Update() {
 
 	// 自キャラの更新
 	player_->Update();
-
 }
 
 void GameScene::Draw() {

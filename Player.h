@@ -5,6 +5,8 @@
 #include"ViewProjection.h"
 #include "DebugText.h"
 #include"PlayerBullet.h"
+#include<memory>
+#include<list>
 
 /// <summary>
 /// Ž©ƒLƒƒƒ‰
@@ -51,5 +53,5 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	// ’e
-	PlayerBullet* bullet_ = nullptr;
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 };

@@ -49,7 +49,7 @@ Matrix4 Mat_Rotation(Vector3& rotation)
 	matRotX.m[2][2] = cos(rotation.x);
 	matRotX.m[3][3] = 1;
 
-	// Yé≤âÒì]çsóÒ
+	// Yé≤âÒì]çsóÒz
 	matRotY.m[0][0] = cos(rotation.y);
 	matRotY.m[0][2] = -sin(rotation.y);
 	matRotY.m[1][1] = 1;
