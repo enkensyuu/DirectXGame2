@@ -4,14 +4,11 @@
 #include "Input.h"
 #include"ViewProjection.h"
 #include "DebugText.h"
-#include"PlayerBullet.h"
-#include<memory>
-#include<list>
 
 /// <summary>
-/// 自キャラ
+/// 敵
 /// </summary>
-class Player
+class Enemy
 {
 public:
 	/// <summary>
@@ -32,15 +29,7 @@ public:
 	/// <param name="viewProjection">ビュープロジェクション(参照渡し)</param>
 	void Draw(ViewProjection& viewProjection_);
 
-	void Rotate();
-
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	void Attack();
-
 private:
-	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
 
 	// ワールド変換データ
@@ -51,7 +40,4 @@ private:
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
-
-	// 弾
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 };

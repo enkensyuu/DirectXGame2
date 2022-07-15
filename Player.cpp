@@ -2,13 +2,13 @@
 #include <cassert>
 #include"Procession.h"
 
-void Player::Initialize(Model* model, uint32_t textuerhandle)
+void Player::Initialize(Model* model, uint32_t textuerHandle)
 {
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
-	textureHandle_ = textuerhandle;
+	textureHandle_ = textuerHandle;
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
