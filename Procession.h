@@ -2,6 +2,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <DirectXMath.h>
+#include"Enemy.h"
 
 Matrix4 Mat_Identity();
 

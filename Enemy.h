@@ -29,6 +29,12 @@ public:
 	/// <param name="viewProjection">ビュープロジェクション(参照渡し)</param>
 	void Draw(ViewProjection& viewProjection_);
 
+	// 接近フェーズ行動
+	void Approach();
+
+	//　離脱フェーズ行動
+	void Leave();
+
 private:
 	DebugText* debugText_ = nullptr;
 
@@ -40,4 +46,14 @@ private:
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+
+	// 行動フェーズ
+	enum class Phase
+	{
+		Approach,	//	接近する
+		Leave,		//	離脱する
+	};
+
+	// フェーズ
+	Phase phase_= Phase::Approach;
 };
