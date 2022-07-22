@@ -4,6 +4,7 @@
 #include "Input.h"
 #include"ViewProjection.h"
 #include "DebugText.h"
+#include"EnemyBullet.h"
 
 /// <summary>
 /// 敵
@@ -35,7 +36,18 @@ public:
 	//　離脱フェーズ行動
 	void Leave();
 
+	/// <summary>
+	/// 弾発射
+	/// </summary>
+	void Fire();
+
+	// 発射間隔
+	static const int kFireInterval = 60;
+
+	// 接近フェーズ初期化
+	void ApproachInitialize();
 private:
+	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
 
 	// ワールド変換データ
@@ -55,5 +67,11 @@ private:
 	};
 
 	// フェーズ
-	Phase phase_= Phase::Approach;
+	Phase phase_ = Phase::Approach;
+
+	// 弾
+	std::list<std::unique_ptr<EnemyBullet>> bullets_;
+
+	// 発射タイマー
+	int32_t FireTimer = 0;
 };
