@@ -6,6 +6,9 @@
 #include "DebugText.h"
 #include"EnemyBullet.h"
 
+// 自機クラスの前方宣言
+class Player;
+
 /// <summary>
 /// 敵
 /// </summary>
@@ -46,6 +49,15 @@ public:
 
 	// 接近フェーズ初期化
 	void ApproachInitialize();
+
+	void SetPlayer(Player* player) { player_ = player; }
+
+	Vector3 GetWorldPosition();
+
+	float length() const;
+
+	Vector3 Normalize();
+
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
@@ -74,4 +86,6 @@ private:
 
 	// 発射タイマー
 	int32_t FireTimer = 0;
+
+	Player* player_ = nullptr;
 };

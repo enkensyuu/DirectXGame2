@@ -39,6 +39,9 @@ public:
 	/// </summary>
 	void Attack();
 
+	// ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	Vector3 GetWorldPosition();
+
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
