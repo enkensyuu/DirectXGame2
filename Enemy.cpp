@@ -2,6 +2,7 @@
 #include <cassert>
 #include"Procession.h"
 #include"Player.h"
+#include<cmath>
 
 void Enemy::Approach()
 {
@@ -112,13 +113,29 @@ void Enemy::Draw(ViewProjection& viewProjection_)
 
 void Enemy::Fire()
 {
+	Vector3 position = worldTransform_.translation_;
+
 	assert(player_);
 	// íeÇÃë¨ìx
 	const float kBulletSpeed = 1.0f;
 
-	Vector3 Playervelocity = player_->GetWorldPosition();
-	Vector3 Enemyvelocity = GetWorldPosition();
-	Vector3 velocity = Playervelocity -= Enemyvelocity;
+	Vector3 velocity(0, 0, kBulletSpeed);
+
+	Vector3 targetPos = player_->GetWorldPosition();
+	Vector3 basePos = this->GetWorldPosition();
+
+	Vector3 vector = targetPos;
+	vector -= basePos;
+
+	float len = (float)std::sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+
+
+	if (len /= 0)
+	{
+		vector /= len;
+	}
+	vector *= kBulletSpeed;
+	velocity = vector;
 
 	// íeÇê∂ê¨ÇµÅAèâä˙âª
 	std::unique_ptr < EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
@@ -144,19 +161,3 @@ Vector3 Enemy::GetWorldPosition()
 	worldPos.z = worldTransform_.translation_.z;
 	return worldPos;
 }
-
-float Enemy::length() const
-{
-	return std::sqrt(x * x + y * y + z * z);
-}
-
-Vector3 Enemy::Normalize()
-{
-	float len = length();
-	if (len != 0)
-	{
-		return*this /= len;
-	}
-	return*this;
-}
-
