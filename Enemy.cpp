@@ -1,6 +1,8 @@
 #include"Enemy.h"
 #include <cassert>
 #include"Procession.h"
+#include"Player.h"
+#include<cmath>
 
 void Enemy::Approach()
 {
@@ -111,12 +113,27 @@ void Enemy::Draw(ViewProjection& viewProjection_)
 
 void Enemy::Fire()
 {
+	assert(player_);
+
 	// 弾の速度
 	const float kBulletSpeed = 1.0f;
 	Vector3 velocity(0, 0, kBulletSpeed);
 
-	// 速度ベクトルを自機の向きに合わせて回転させる
-	velocity = Mat_Velocity(velocity, worldTransform_.matWorld_);
+	Vector3 PlayerVelocity = player_->GetWorldPosition();
+	Vector3 EnemyVelocity = this->GetWorldPosition();
+
+	Vector3 vector = PlayerVelocity;
+	vector -= EnemyVelocity;
+
+	float len = (float)std::sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+
+	if (len!=0)
+	{
+		vector /= len;
+	}
+
+	vector *= -kBulletSpeed;
+	velocity = vector;
 
 	// 弾を生成し、初期化
 	std::unique_ptr < EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
@@ -130,4 +147,16 @@ void Enemy::ApproachInitialize()
 {
 	// 発射タイマーを初期化
 	FireTimer = kFireInterval;
+}
+
+Vector3 Enemy::GetWorldPosition()
+{
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
 }
