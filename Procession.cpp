@@ -106,3 +106,14 @@ Vector3 Mat_Velocity(Vector3 velocity, Matrix4 matWorld)
 
 	return matvelocity;
 }
+
+Vector3 Normalize(Vector3& vector)
+{
+	float len = (float)std::sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+
+	if (len != 0)
+	{
+		vector /= len;
+	}
+	return vector;
+}

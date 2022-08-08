@@ -125,12 +125,7 @@ void Enemy::Fire()
 	Vector3 vector = PlayerVelocity;
 	vector -= EnemyVelocity;
 
-	float len = (float)std::sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
-
-	if (len!=0)
-	{
-		vector /= len;
-	}
+	Normalize(vector);
 
 	vector *= -kBulletSpeed;
 	velocity = vector;
@@ -159,4 +154,8 @@ Vector3 Enemy::GetWorldPosition()
 	worldPos.z = worldTransform_.translation_.z;
 
 	return worldPos;
+}
+
+void Enemy::OnCollision()
+{
 }
