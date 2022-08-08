@@ -60,3 +60,8 @@ void PlayerBullet::OnCollision()
 {
 	isDead_ = true;
 }
+
+float PlayerBullet::Radius()
+{
+	return radius_;
+}

@@ -59,6 +59,8 @@ public:
 
 	// ’eƒŠƒXƒg‚ğæ“¾
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
+
+	float Radius();
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
@@ -90,4 +92,6 @@ private:
 
 	// ©ƒLƒƒƒ‰
 	Player* player_ = nullptr;
+
+	const float radius_ = 1.0f;
 };

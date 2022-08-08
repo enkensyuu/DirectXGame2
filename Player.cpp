@@ -143,3 +143,8 @@ Vector3 Player::GetWorldPosition()
 
 	return worldPos;
 }
+
+float Player::Radius()
+{
+	return radius_;
+}
