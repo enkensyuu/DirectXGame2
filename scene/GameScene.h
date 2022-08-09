@@ -13,6 +13,7 @@
 #include"DebugCamera.h"
 #include"Player.h"
 #include"Enemy.h"
+#include"Procession.h"
 
 /// <summary>
 /// ゲームシーン
@@ -48,7 +49,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 衝突判定と応答
 	/// </summary>
-	void CheckAllCollsons();
+	void CheckAllCollisions();
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;

@@ -122,8 +122,9 @@ void Enemy::Fire()
 	Vector3 PlayerVelocity = player_->GetWorldPosition();
 	Vector3 EnemyVelocity = this->GetWorldPosition();
 
-	Vector3 vector = PlayerVelocity;
-	vector -= EnemyVelocity;
+	Vector3 vector = Vectornorm(PlayerVelocity, EnemyVelocity);
+
+	Length(vector);
 
 	Normalize(vector);
 
