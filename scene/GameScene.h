@@ -14,6 +14,7 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"Procession.h"
+#include"Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -62,20 +63,9 @@ private: // メンバ変数
 
 	// 3Dモデル
 	Model* model_ = nullptr;
-	// パーツID
-	enum PartId {
-		kRoot,	//	大元
-		kSpine,	//	脊椎
-		kChest,	//	胸
-		kHead,	//	頭
-		kArmL,	//	左腕
-		kArmR,	//	右腕
-		kHip,	//	尻
-		kLegL,	//	左足
-		kLegR,	//	右足
-
-		kNumPartId
-	};
+	
+	// ワールド変換データ
+	WorldTransform worldTransform_;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
@@ -91,6 +81,12 @@ private: // メンバ変数
 
 	// 敵キャラ
 	Enemy* enemy_ = nullptr;
+
+	// 天球
+	Skydome* skydome_ = nullptr;
+
+	// 3Dモデル
+	Model* modelSkydome_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用
