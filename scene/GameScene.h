@@ -15,6 +15,7 @@
 #include"Enemy.h"
 #include"Procession.h"
 #include"Skydome.h"
+#include"RailCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,6 +53,8 @@ public: // メンバ関数
 	/// </summary>
 	void CheckAllCollisions();
 
+	float Angle(float angle);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -87,6 +90,11 @@ private: // メンバ変数
 
 	// 3Dモデル
 	Model* modelSkydome_ = nullptr;
+
+	// レールカメラ
+	std::unique_ptr<RailCamera> railcamera_;
+
+	bool isDebugCameraActive_ = false;
 
 	/// <summary>
 	/// ゲームシーン用

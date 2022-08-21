@@ -86,6 +86,12 @@ void GameScene::CheckAllCollisions()
 
 }
 
+float GameScene::Angle(float angle)
+{
+	return angle * pi / 180;
+}
+
+
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
@@ -137,9 +143,25 @@ void GameScene::Initialize() {
 
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_);
+
+	//レ-ルカメラ
+	railcamera_ = std::make_unique<RailCamera>();
+	railcamera_->Initialize(Vector3(0, 0, -50), Vector3(0, 0, 0));
+
+	//レールカメラとプレイヤーの親子構造
+	player_->SetCamera(railcamera_->GetWorldMatrix());
+	
 }
 
-void GameScene::Update() {
+void GameScene::Update() 
+{
+	railcamera_->Update();
+
+	//railCameraをゲームシーンに適応させる
+	viewProjection_.matView = railcamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = railcamera_->GetViewProjection().matProjection;
+	viewProjection_.TransferMatrix();
+
 	// 自キャラの更新
 	player_->Update();
 
@@ -150,6 +172,8 @@ void GameScene::Update() {
 
 	// 天球の更新
 	skydome_->Update();
+
+	
 }
 
 void GameScene::Draw() {

@@ -49,6 +49,8 @@ public:
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
 	float Radius();
+
+	void SetCamera(WorldTransform* camera) { worldTransform_.parent_ = camera; }
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
