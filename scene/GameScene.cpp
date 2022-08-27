@@ -131,7 +131,7 @@ void GameScene::Initialize() {
 
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_);
-
+	
 	// 敵キャラの生成
 	enemy_ = new Enemy();
 
@@ -150,6 +150,7 @@ void GameScene::Initialize() {
 
 	//レールカメラとプレイヤーの親子構造
 	player_->SetCamera(railcamera_->GetWorldMatrix());
+
 	
 }
 

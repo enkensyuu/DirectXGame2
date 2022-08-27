@@ -8,6 +8,8 @@
 #include<memory>
 #include<list>
 
+class RailCamera;
+
 /// <summary>
 /// Ž©ƒLƒƒƒ‰
 /// </summary>
@@ -51,6 +53,7 @@ public:
 	float Radius();
 
 	void SetCamera(WorldTransform* camera) { worldTransform_.parent_ = camera; }
+
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;

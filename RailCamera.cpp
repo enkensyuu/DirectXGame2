@@ -15,7 +15,7 @@ void RailCamera::Update()
 {
 	//移動(ベクトルを加算)
 	worldTransform_.translation_ += Vector3(0, 0, 0.1f);
-	worldTransform_.rotation_ += Vector3(0, 0.1f, 0);
+
 	//トランスフォームを更新
 	worldTransform_.matWorld_ = Mat_Identity();
 	worldTransform_.matWorld_ *= Mat_Scale(worldTransform_.scale_);
@@ -27,9 +27,9 @@ void RailCamera::Update()
 	viewProjection_.eye.z = worldTransform_.matWorld_.m[3][2];
 
 	//ワールド前方ベクトル
-	Vector3 forward(0, 0, -1);
+	Vector3 forward(0, 0, 1);
 	//レールカメラの回転を反映(レールカメラの前方ベクトル)
-	forward = BulletRot(forward, worldTransform_.matWorld_);
+	forward = Mat_Velocity(forward, worldTransform_.matWorld_);
 
 	//視点から前方に適当な距離進んだ位置が注視点
 	viewProjection_.target = forward += viewProjection_.eye;
@@ -38,7 +38,7 @@ void RailCamera::Update()
 	Vector3 up(0, 1, 0);
 
 	//レールカメラの回転を反映 (レールカメラの上方ベクトル)
-	viewProjection_.up = BulletRot(up, worldTransform_.matWorld_);
+	viewProjection_.up = Mat_Velocity(up, worldTransform_.matWorld_);
 
 	//ビュープロジェクションを更新
 	viewProjection_.UpdateMatrix();

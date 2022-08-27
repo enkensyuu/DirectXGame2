@@ -14,6 +14,8 @@ void Player::Initialize(Model* model, uint32_t textuerHandle)
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
+	worldTransform_.translation_ = { 0,0,20 }; 
+
 	worldTransform_.Initialize();
 }
 
@@ -67,6 +69,9 @@ void Player::Update()
 	// 行列更新
 	worldTransform_.matWorld_ = Mat_Identity();
 	worldTransform_.matWorld_ = MatWorld(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
+
 	worldTransform_.TransferMatrix();
 
 	// デバッグ用表示
@@ -98,13 +103,21 @@ void Player::Rotate()
 {
 	const float kRotateSpeed = 0.02f;
 
-	if (input_->PushKey(DIK_U))
+	if (input_->PushKey(DIK_A))
 	{
 		worldTransform_.rotation_.y -= kRotateSpeed;
 	}
-	else if (input_->PushKey(DIK_I))
+	else if (input_->PushKey(DIK_D))
 	{
 		worldTransform_.rotation_.y += kRotateSpeed;
+	}
+	else if (input_->PushKey(DIK_W))
+	{
+		worldTransform_.rotation_.x += kRotateSpeed;
+	}
+	else if (input_->PushKey(DIK_S))
+	{
+		worldTransform_.rotation_.x -= kRotateSpeed;
 	}
 }
 
@@ -121,7 +134,7 @@ void Player::Attack()
 
 		// 弾を生成し、初期化
 		std::unique_ptr < PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(model_, worldTransform_.matWorld_, velocity);
 
 		// 弾を登録する
 		bullets_.push_back(std::move(newBullet));

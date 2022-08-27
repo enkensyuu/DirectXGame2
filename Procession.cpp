@@ -128,25 +128,3 @@ Vector3 Normalize(Vector3& vector)
 	}
 	return vector;
 }
-
-Vector3 BulletRot(Vector3 velocity, Matrix4 transform)
-{
-	Vector3 bulletrot;
-
-	bulletrot.x = velocity.x * transform.m[0][0];
-	bulletrot.x += velocity.y * transform.m[1][0];
-	bulletrot.x += velocity.z * transform.m[2][0];
-	bulletrot.x += velocity.x * transform.m[3][0];
-	
-	bulletrot.y = velocity.x * transform.m[0][1];
-	bulletrot.y += velocity.y * transform.m[1][1];
-	bulletrot.y += velocity.z * transform.m[2][1];
-	bulletrot.y += velocity.y * transform.m[3][1];
-	
-	bulletrot.z = velocity.x * transform.m[0][2];
-	bulletrot.z += velocity.y * transform.m[1][2];
-	bulletrot.z += velocity.z * transform.m[2][2];
-	bulletrot.z += velocity.z * transform.m[3][2];
-
-	return bulletrot;
-}
