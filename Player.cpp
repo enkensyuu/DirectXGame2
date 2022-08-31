@@ -28,8 +28,6 @@ void Player::Update()
 		}
 	);
 
-	// 旋回処理
-	Rotate();
 
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0,0,0 };
@@ -57,8 +55,8 @@ void Player::Update()
 	worldTransform_.translation_ += move;
 
 	// 移動限界座標
-	const float kMoveLimitX = 35;
-	const float kMoveLimitY = 19;
+	const float kMoveLimitX = 13.0f;
+	const float kMoveLimitY = 7.0f;
 
 	// 範囲を超えない処理
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
@@ -96,28 +94,6 @@ void Player::Draw(ViewProjection& viewProjection)
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
 	{
 		bullet->Draw(viewProjection);
-	}
-}
-
-void Player::Rotate()
-{
-	const float kRotateSpeed = 0.02f;
-
-	if (input_->PushKey(DIK_A))
-	{
-		worldTransform_.rotation_.y -= kRotateSpeed;
-	}
-	else if (input_->PushKey(DIK_D))
-	{
-		worldTransform_.rotation_.y += kRotateSpeed;
-	}
-	else if (input_->PushKey(DIK_W))
-	{
-		worldTransform_.rotation_.x += kRotateSpeed;
-	}
-	else if (input_->PushKey(DIK_S))
-	{
-		worldTransform_.rotation_.x -= kRotateSpeed;
 	}
 }
 

@@ -34,8 +34,6 @@ public:
 	/// <param name="viewProjection">ビュープロジェクション(参照渡し)</param>
 	void Draw(ViewProjection& viewProjection_);
 
-	void Rotate();
-
 	/// <summary>
 	/// 攻撃
 	/// </summary>

@@ -4,16 +4,68 @@
 #include"Player.h"
 #include<cmath>
 
-void Enemy::Approach()
+void Enemy::Move()
 {
-	Vector3 ApproachSpeed = { 0,0,-0.2f };
+	ChangeTimeX--;
+	ChangeTimeY--;
 
-	// 移動(ベクトルを加算)
-	worldTransform_.translation_ += ApproachSpeed;
+	Vector3 MoveSpeedX = { 0.2f,0,0 };
+	Vector3 MoveSpeedY = { 0,0.2f,0 };
+
 	// 規定の位置に到達したら離脱
-	if (worldTransform_.translation_.z < 0.0f)
+	// 移動限界座標
+	const float kMoveLimitX = 13.0f;
+	const float kMoveLimitY = 7.0f;
+
+	// 範囲を超えない処理
+	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	
+	// 範囲を超えない処理
+	if (ChangeSpeedFlagX == 1 && ChangeTimeX <= 0)
 	{
-		phase_ = Phase::Leave;
+		ChangeSpeedFlagX = 0;
+		ChangeTimeX = 240;
+	}
+
+	if (ChangeSpeedFlagY == 1 && ChangeTimeY <= 0)
+	{
+		ChangeTimeY = 240;
+		ChangeSpeedFlagY = 0;
+	}
+
+	if (ChangeSpeedFlagX == 0)
+	{
+		worldTransform_.translation_ += MoveSpeedX;
+	}
+
+	if (ChangeSpeedFlagY == 0)
+	{
+		worldTransform_.translation_ += MoveSpeedY;
+	}
+
+	if (ChangeSpeedFlagX == 0 && ChangeTimeX <= 0)
+	{
+		ChangeTimeX = 240;
+		ChangeSpeedFlagX = 1;
+	}
+
+	if (ChangeSpeedFlagY == 0 && ChangeTimeY <= 0)
+	{
+		ChangeSpeedFlagY = 1;
+		ChangeTimeY = 240;
+	}
+
+	if (ChangeSpeedFlagX == 1)
+	{
+		worldTransform_.translation_ -= MoveSpeedX;
+	}
+
+	if (ChangeSpeedFlagY == 1)
+	{
+		worldTransform_.translation_ -= MoveSpeedY;
 	}
 
 	// 発射タイマーカウントダウン
@@ -28,12 +80,9 @@ void Enemy::Approach()
 	}
 }
 
-void Enemy::Leave()
+void Enemy::LevelUp()
 {
-	Vector3 LeaveSpeed = { 0.2f,0,0.2f };
 
-	// 移動(ベクトルを加算)
-	worldTransform_.translation_ += LeaveSpeed;
 }
 
 void Enemy::Initialize(Model* model, uint32_t textuerHandle)
@@ -53,7 +102,7 @@ void Enemy::Initialize(Model* model, uint32_t textuerHandle)
 	worldTransform_.Initialize();
 
 	// 引数で受け取った初期座標をセット
-	worldTransform_.translation_ = { 0,3,100 };
+	worldTransform_.translation_ = { 0,0,40 };
 
 	// キャラクター攻撃処理
 	ApproachInitialize();
@@ -61,14 +110,15 @@ void Enemy::Initialize(Model* model, uint32_t textuerHandle)
 
 void Enemy::Update()
 {
+
 	switch (phase_)
 	{
-	case Phase::Approach:
+	case Phase::Move:
 	default:
-		Approach();
+		Move();
 		break;
-	case Phase::Leave:
-		Leave();
+	case Phase::LevelUp:
+		LevelUp();
 		break;
 	}
 

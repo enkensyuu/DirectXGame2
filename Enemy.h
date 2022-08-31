@@ -6,7 +6,10 @@
 #include "DebugText.h"
 #include"EnemyBullet.h"
 
+
 class Player;
+
+class RailCamera;
 
 /// <summary>
 /// 敵
@@ -33,10 +36,10 @@ public:
 	void Draw(ViewProjection& viewProjection_);
 
 	// 接近フェーズ行動
-	void Approach();
+	void Move();
 
 	//　離脱フェーズ行動
-	void Leave();
+	void LevelUp();
 
 	/// <summary>
 	/// 弾発射
@@ -61,6 +64,7 @@ public:
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
 	float Radius();
+
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
@@ -77,12 +81,12 @@ private:
 	// 行動フェーズ
 	enum class Phase
 	{
-		Approach,	//	接近する
-		Leave,		//	離脱する
+		Move,	//	接近する
+		LevelUp,		//	離脱する
 	};
 
 	// フェーズ
-	Phase phase_ = Phase::Approach;
+	Phase phase_ = Phase::Move;
 
 	// 弾
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
@@ -94,4 +98,11 @@ private:
 	Player* player_ = nullptr;
 
 	const float radius_ = 1.0f;
+
+	bool ChangeSpeedFlagX = 0;
+
+	bool ChangeSpeedFlagY = 0;
+
+	int32_t ChangeTimeX = 240;
+	int32_t ChangeTimeY = 240;
 };
