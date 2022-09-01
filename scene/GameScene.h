@@ -62,22 +62,13 @@ private: // メンバ変数
 	DebugText* debugText_ = nullptr;
 
 	// テクスチャハンドル
-	uint32_t textureHandle_ = 0;
+	uint32_t textureHandle1_ = 0; 
+	uint32_t textureHandle2_ = 0; 
+	uint32_t textureHandle3_ = 0; 
 
-	// 3Dモデル
-	Model* model_ = nullptr;
-	
-	// ワールド変換データ
-	WorldTransform worldTransform_;
-
-	// ビュープロジェクション
-	ViewProjection viewProjection_;
-
-	// デバッグカメラの生成
-	//DebugCamera* debugCamera_ = nullptr;
-
-	// カメラ上方向の角度
-	float viewAngle = 0.0f;
+	Sprite* sprite1_ = nullptr;
+	Sprite* sprite2_ = nullptr;
+	Sprite* sprite3_ = nullptr;
 
 	// 自キャラ
 	Player* player_ = nullptr;
@@ -90,9 +81,23 @@ private: // メンバ変数
 
 	// 3Dモデル
 	Model* modelSkydome_ = nullptr;
-
+	Model* model_ = nullptr;
+	Model* modelEnemy_ = nullptr;
+	Model* modelBullet_ = nullptr;
+	
 	// レールカメラ
 	std::unique_ptr<RailCamera> railcamera_;
+
+	// ワールド変換データ
+	WorldTransform worldTransform_;
+
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
+
+
+
+
+	
 
 	bool isDebugCameraActive_ = false;
 

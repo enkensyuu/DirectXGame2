@@ -28,26 +28,10 @@ public:
 	// ワールド行列を取得
 	WorldTransform* GetWorldMatrix() { return &worldTransform_; }
 
-	float Radius();
-
-	// 衝突を検出したら呼び出されるコールバック関数
-	void OnCollision();
-
-	// ワールド座標を取得
-	Vector3 GetWorldPosition();
-
-	float Hp();
-
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
 
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
-
-	const float radius_ = 1.0f;
-
-	int32_t hp = 150;
-
-	
 };

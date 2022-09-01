@@ -22,7 +22,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="textuerHandle">テクスチャハンドル</param>
-	void Initialize(Model* model, uint32_t textuerHandle);
+	void Initialize(Model* model, Model* model2);
 
 	/// <summary>
 	///更新
@@ -76,6 +76,7 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
+	Model* model2_ = nullptr;
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;

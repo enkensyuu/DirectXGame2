@@ -85,17 +85,17 @@ void Enemy::LevelUp()
 
 }
 
-void Enemy::Initialize(Model* model, uint32_t textuerHandle)
+void Enemy::Initialize(Model* model, Model*model2)
 {
 	// NULLポインタチェック
 	assert(model);
+	assert(model2);
 
 	model_ = model;
+	model2_ = model2;
 
 	hp = 200;
 
-	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("lui-zi.jpg");
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -159,7 +159,7 @@ void Enemy::Update()
 
 void Enemy::Draw(ViewProjection& viewProjection_)
 {
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection_);
 	// 弾描画
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_)
 	{
@@ -189,7 +189,7 @@ void Enemy::Fire()
 
 	// 弾を生成し、初期化
 	std::unique_ptr < EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+	newBullet->Initialize(model2_, worldTransform_.translation_, velocity);
 
 	// 弾を登録する
 	bullets_.push_back(std::move(newBullet));

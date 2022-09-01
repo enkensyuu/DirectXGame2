@@ -21,7 +21,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="textuerHandle">テクスチャハンドル</param>
-	void Initialize(Model* model, uint32_t textuerHandle);
+	void Initialize(Model* model, Model* model2);
 
 	/// <summary>
 	///更新
@@ -53,6 +53,8 @@ public:
 
 	void SetCamera(WorldTransform* camera) { worldTransform_.parent_ = camera; }
 
+	float Hp();
+
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
@@ -62,6 +64,7 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
+	Model* model2_ = nullptr;
 
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
@@ -70,4 +73,6 @@ private:
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
 	const float radius_ = 1.0f;
+
+	int32_t hp = 150;
 };

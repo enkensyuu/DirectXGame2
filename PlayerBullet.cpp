@@ -9,9 +9,6 @@ void PlayerBullet::Initialize(Model* model, const Matrix4& position, const Vecto
 
 	model_ = model;
 
-	// テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("black.png");
-
 	// 引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
 
@@ -43,7 +40,7 @@ void PlayerBullet::Update()
 void PlayerBullet::Draw(const ViewProjection& viewProjection)
 {
 	// モデルの描画
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection);
 }
 
 Vector3 PlayerBullet::GetWorldPosition()

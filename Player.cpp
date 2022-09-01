@@ -2,14 +2,16 @@
 #include <cassert>
 #include"Procession.h"
 
-void Player::Initialize(Model* model, uint32_t textuerHandle)
+void Player::Initialize(Model* model, Model*model2)
 {
 	// NULLポインタチェック
 	assert(model);
+	assert(model2);
 
 	model_ = model;
-	textureHandle_ = textuerHandle;
+	model2_ = model2;
 
+	hp = 150;
 
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
@@ -83,11 +85,15 @@ void Player::Update()
 	{
 		bullet->Update();
 	}
+
+	//デバッグ用表示
+	debugText_->SetPos(0, 650);
+	debugText_->Printf("PlayerHP=%d", hp);
 }
 
 void Player::Draw(ViewProjection& viewProjection)
 {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection);
 
 	// 弾描画
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)
@@ -109,7 +115,7 @@ void Player::Attack()
 
 		// 弾を生成し、初期化
 		std::unique_ptr < PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(model_, worldTransform_.matWorld_, velocity);
+		newBullet->Initialize(model2_, worldTransform_.matWorld_, velocity);
 
 		// 弾を登録する
 		bullets_.push_back(std::move(newBullet));
@@ -118,6 +124,7 @@ void Player::Attack()
 
 void Player::OnCollision()
 {
+	hp -= 10;
 }
 
 Vector3 Player::GetWorldPosition()
@@ -135,4 +142,9 @@ Vector3 Player::GetWorldPosition()
 float Player::Radius()
 {
 	return radius_;
+}
+
+float Player::Hp()
+{
+	return hp;
 }

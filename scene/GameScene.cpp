@@ -16,7 +16,12 @@ GameScene::~GameScene() {
 	//delete debugCamera_;
 	delete player_;
 	delete enemy_;
+	delete modelEnemy_;
+	delete modelBullet_;
 	delete modelSkydome_;
+	delete sprite1_;
+	delete sprite2_;
+	delete sprite3_;
 }
 
 void GameScene::CheckAllCollisions()
@@ -29,7 +34,7 @@ void GameScene::CheckAllCollisions()
 	//敵弾リストの取得
 	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
 #pragma region 自キャラと敵弾の当たり判定
-	posA = railcamera_->GetWorldPosition();
+	posA = player_->GetWorldPosition();
 
 	// 自キャラと敵弾全ての当たり判定
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
@@ -37,10 +42,10 @@ void GameScene::CheckAllCollisions()
 		posB = bullet->GetWorldPosition();
 		Vector3 len = Vectornorm(posA, posB);
 		float dis = Length(len);
-		float radius = railcamera_->Radius() + bullet->Radius();
+		float radius = player_->Radius() + bullet->Radius();
 		if (dis <= radius)
 		{
-			railcamera_->OnCollision();
+			player_->OnCollision();
 			bullet->OnCollision();
 		}
 	}
@@ -80,43 +85,32 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 
 	//	ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("mario.jpg");
+	textureHandle1_ = TextureManager::Load("title.png");
+	textureHandle2_ = TextureManager::Load("gameover.png");
+	textureHandle3_ = TextureManager::Load("gamecler.png");
+
+	sprite1_ = Sprite::Create(textureHandle1_, { 0,0 });
+	sprite2_ = Sprite::Create(textureHandle2_, { 0,0 });
+	sprite3_ = Sprite::Create(textureHandle3_, { 0,0 });
 
 	//	3Dモデルの生成
-	model_ = Model::Create();
+	model_ = Model::CreateFromOBJ("Player",true);
+	modelEnemy_ = Model::CreateFromOBJ("Enemy",true);
+	modelBullet_ = Model::CreateFromOBJ("Bullet",true);
 	modelSkydome_ = Model::CreateFromOBJ("WorldBase", true);
 
-	// 軸方向表示の表示を有効にする
-	AxisIndicator::GetInstance()->SetVisible(true);
-
-	// 軸方向表示が参照するビュープロジェクションを指定する(アドレス渡し)
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
-
-	// 乱数シード生成器
-	std::random_device seed_gen;
-
-	// メルセンヌ・ツイスターの乱数エンジン
-	std::mt19937_64 engine(seed_gen());
-
-	// 乱数範囲の指定
-	std::uniform_real_distribution<float>RotDist(0.0f, XM_2PI);
-
-	std::uniform_real_distribution<float>TransDist(-10.0f, 10.0f);
-
-	// ビュープロジェクションの初期化
-	viewProjection_.Initialize();
 
 	// 自キャラの生成
 	player_ = new Player();
 
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(model_, modelBullet_);
 
 	// 敵キャラの生成
 	enemy_ = new Enemy();
 
 	// 敵キャラの初期化
-	enemy_->Initialize(model_, textureHandle_);
+	enemy_->Initialize(modelEnemy_, modelBullet_);
 
 	// 敵キャラに自キャラのアドレスを渡す
 	enemy_->SetPlayer(player_);
@@ -130,6 +124,10 @@ void GameScene::Initialize() {
 
 	//レールカメラとプレイヤーの親子構造
 	player_->SetCamera(railcamera_->GetWorldMatrix());
+
+	// ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+
 }
 
 void GameScene::Update()
@@ -144,19 +142,13 @@ void GameScene::Update()
 		}
 		break;
 	case 2:
-		if (input_->TriggerKey(DIK_SPACE))
+		if (player_->Hp() <= 0)
 		{
 			Scene = 3;
 		}
-		break;
-	case 3:
-		if (railcamera_->Hp() <= 0)
-		{
-			Scene = 4;
-		}
 		if (enemy_->Hp() <= 0)
 		{
-			Scene = 5;
+			Scene = 4;
 		}
 		railcamera_->Update();
 
@@ -176,13 +168,13 @@ void GameScene::Update()
 		// 天球の更新
 		skydome_->Update();
 		break;
-	case 4:
+	case 3:
 		if (input_->TriggerKey(DIK_LSHIFT))
 		{
 			Scene = 1;
 		}
 		break;
-	case 5:
+	case 4:
 		if (input_->TriggerKey(DIK_LSHIFT))
 		{
 			Scene = 1;
@@ -204,7 +196,31 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
+	switch (Scene)
+	{
+	case 1:
+		sprite1_->Draw();
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			Scene = 2;
 
+		}
+		break;
+	case 3:
+		sprite2_->Draw();
+		if (input_->TriggerKey(DIK_LSHIFT))
+		{
+			Scene = 1;
+		}
+		break;
+	case 4:
+		sprite3_->Draw();
+		if (input_->TriggerKey(DIK_LSHIFT))
+		{
+			Scene = 1;
+		}
+		break;
+	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -218,13 +234,26 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	
+	switch (Scene)
+	{
+	case 2:
+		if (player_->Hp() <= 0)
+		{
+			Scene = 3;
+		}
+		if (enemy_->Hp() <= 0)
+		{
+			Scene = 4;
+		}
+		player_->Draw(viewProjection_);
 
-	player_->Draw(viewProjection_);
+		enemy_->Draw(viewProjection_);
 
-	enemy_->Draw(viewProjection_);
-
-	skydome_->Draw(viewProjection_);
-
+		skydome_->Draw(viewProjection_);
+		break;
+	
+	}
 	// ライン描画が参照するビュープロジェクションを指定する(アドレス渡し)
 	//PrimitiveDrawer::GetInstance()->DrawLine3d({ 0,0,0 }, { 70,-70,0 }, { 1,0,0,1 });
 
