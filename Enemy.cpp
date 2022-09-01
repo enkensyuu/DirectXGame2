@@ -9,8 +9,8 @@ void Enemy::Move()
 	ChangeTimeX--;
 	ChangeTimeY--;
 
-	Vector3 MoveSpeedX = { 0.2f,0,0 };
-	Vector3 MoveSpeedY = { 0,0.2f,0 };
+	Vector3 MoveSpeedX = { 0.1f,0,0 };
+	Vector3 MoveSpeedY = { 0,0.1f,0 };
 
 	// 規定の位置に到達したら離脱
 	// 移動限界座標
@@ -22,7 +22,7 @@ void Enemy::Move()
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
-	
+
 	// 範囲を超えない処理
 	if (ChangeSpeedFlagX == 1 && ChangeTimeX <= 0)
 	{
@@ -92,6 +92,8 @@ void Enemy::Initialize(Model* model, uint32_t textuerHandle)
 
 	model_ = model;
 
+	hp = 200;
+
 	// テクスチャ読み込み
 	textureHandle_ = TextureManager::Load("lui-zi.jpg");
 
@@ -149,6 +151,10 @@ void Enemy::Update()
 	{
 		bullet->Update();
 	}
+
+	// デバッグ用表示
+	debugText_->SetPos(0, 0);
+	debugText_->Printf("EnemyHP=%d", hp);
 }
 
 void Enemy::Draw(ViewProjection& viewProjection_)
@@ -209,9 +215,15 @@ Vector3 Enemy::GetWorldPosition()
 
 void Enemy::OnCollision()
 {
+	hp -= 10;
 }
 
 float Enemy::Radius()
 {
 	return radius_;
+}
+
+float Enemy::Hp()
+{
+	return hp;
 }

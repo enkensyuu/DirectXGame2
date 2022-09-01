@@ -96,6 +96,8 @@ private: // メンバ変数
 
 	bool isDebugCameraActive_ = false;
 
+	int32_t Scene = 1;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

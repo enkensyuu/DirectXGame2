@@ -65,6 +65,8 @@ public:
 
 	float Radius();
 
+	float Hp();
+
 private:
 	Input* input_ = nullptr;
 	DebugText* debugText_ = nullptr;
@@ -105,4 +107,6 @@ private:
 
 	int32_t ChangeTimeX = 240;
 	int32_t ChangeTimeY = 240;
+
+	int32_t hp = 200;
 };

@@ -10,6 +10,7 @@ void Player::Initialize(Model* model, uint32_t textuerHandle)
 	model_ = model;
 	textureHandle_ = textuerHandle;
 
+
 	// シングルトンインスタンスを取得する
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
@@ -72,9 +73,7 @@ void Player::Update()
 
 	worldTransform_.TransferMatrix();
 
-	// デバッグ用表示
-	debugText_->SetPos(50, 50);
-	debugText_->Printf("Player:(%f,%f,%f)", worldTransform_.translation_.x, worldTransform_.translation_.y, worldTransform_.translation_.z);
+	
 
 	// キャラクター攻撃処理
 	Attack();
@@ -102,7 +101,7 @@ void Player::Attack()
 	if (input_->TriggerKey(DIK_SPACE))
 	{
 		// 弾の速度
-		const float kBulletSpeed = 1.0f;
+		const float kBulletSpeed = 2.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
 		// 速度ベクトルを自機の向きに合わせて回転させる

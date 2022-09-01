@@ -46,6 +46,7 @@ public:
 	Vector3 GetWorldPosition();
 
 	// ’eƒŠƒXƒg‚ğæ“¾
+	std::list<std::unique_ptr<PlayerBullet>>bullet_;
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
 	float Radius();

@@ -8,6 +8,9 @@ void RailCamera::Initialize(const Vector3& position, const Vector3& rotation)
 	worldTransform_.rotation_ = rotation;
 	//ビュープロジェクションの初期化
 	viewProjection_.farZ = 2000.0f;
+
+	hp = 150;
+
 	viewProjection_.Initialize();
 }
 
@@ -53,7 +56,34 @@ void RailCamera::Update()
 	DebugText* debugText_ = DebugText::GetInstance();
 
 	//デバッグ用表示
-	debugText_->SetPos(20, 100);
-	debugText_->Printf("RailCamera Pos(%f,%f,%f)", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
+	debugText_->SetPos(0, 650);
+	debugText_->Printf("PlayerHP=%d", hp);
 
+}
+
+float RailCamera::Radius()
+{
+	return radius_;
+}
+
+Vector3 RailCamera::GetWorldPosition()
+{
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得(ワールド座標)
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}
+
+float RailCamera::Hp()
+{
+	return hp;
+}
+
+void RailCamera::OnCollision()
+{
+	hp -= 10;
 }

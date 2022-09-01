@@ -29,7 +29,7 @@ void GameScene::CheckAllCollisions()
 	//敵弾リストの取得
 	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
 #pragma region 自キャラと敵弾の当たり判定
-	posA = player_->GetWorldPosition();
+	posA = railcamera_->GetWorldPosition();
 
 	// 自キャラと敵弾全ての当たり判定
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
@@ -37,10 +37,10 @@ void GameScene::CheckAllCollisions()
 		posB = bullet->GetWorldPosition();
 		Vector3 len = Vectornorm(posA, posB);
 		float dis = Length(len);
-		float radius = player_->Radius() + bullet->Radius();
+		float radius = railcamera_->Radius() + bullet->Radius();
 		if (dis <= radius)
 		{
-			player_->OnCollision();
+			railcamera_->OnCollision();
 			bullet->OnCollision();
 		}
 	}
@@ -60,26 +60,6 @@ void GameScene::CheckAllCollisions()
 		{
 			enemy_->OnCollision();
 			bullet->OnCollision();
-		}
-	}
-#pragma endregion
-
-#pragma region 自弾と敵弾の当たり判定
-	// 自キャラと敵弾全ての当たり判定
-	for (const std::unique_ptr<EnemyBullet>& bullet1 : enemyBullets) {
-		posA = bullet1->GetWorldPosition();
-
-		for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
-			//自弾の座標
-			posB = bullet->GetWorldPosition();
-			Vector3 len = Vectornorm(posA, posB);
-			float dis = Length(len);
-			float radius = enemy_->Radius() + bullet->Radius();
-			if (dis <= radius)
-			{
-				bullet1->OnCollision();
-				bullet->OnCollision();
-			}
 		}
 	}
 #pragma endregion
@@ -154,24 +134,61 @@ void GameScene::Initialize() {
 
 void GameScene::Update()
 {
-	railcamera_->Update();
+	switch (Scene)
+	{
+	case 1:
+		Initialize();
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			Scene = 2;
+		}
+		break;
+	case 2:
+		if (input_->TriggerKey(DIK_SPACE))
+		{
+			Scene = 3;
+		}
+		break;
+	case 3:
+		if (railcamera_->Hp() <= 0)
+		{
+			Scene = 4;
+		}
+		if (enemy_->Hp() <= 0)
+		{
+			Scene = 5;
+		}
+		railcamera_->Update();
 
-	//railCameraをゲームシーンに適応させる
-	viewProjection_.matView = railcamera_->GetViewProjection().matView;
-	viewProjection_.matProjection = railcamera_->GetViewProjection().matProjection;
-	viewProjection_.TransferMatrix();
+		//railCameraをゲームシーンに適応させる
+		viewProjection_.matView = railcamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = railcamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
 
-	// 自キャラの更新
-	player_->Update();
+		// 自キャラの更新
+		player_->Update();
 
-	// 敵キャラの更新
-	enemy_->Update();
+		// 敵キャラの更新
+		enemy_->Update();
 
-	CheckAllCollisions();
+		CheckAllCollisions();
 
-	// 天球の更新
-	skydome_->Update();
-
+		// 天球の更新
+		skydome_->Update();
+		break;
+	case 4:
+		if (input_->TriggerKey(DIK_LSHIFT))
+		{
+			Scene = 1;
+		}
+		break;
+	case 5:
+		if (input_->TriggerKey(DIK_LSHIFT))
+		{
+			Scene = 1;
+		}
+		break;
+	}
 
 }
 
