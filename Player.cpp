@@ -37,19 +37,19 @@ void Player::Update()
 
 	const float kPlayerSpeed = 0.2f;
 
-	if (input_->PushKey(DIK_LEFT))
+	if (input_->PushKey(DIK_A))
 	{
 		move.x -= kPlayerSpeed;
 	}
-	else if (input_->PushKey(DIK_RIGHT))
+	else if (input_->PushKey(DIK_D))
 	{
 		move.x += kPlayerSpeed;
 	}
-	else if (input_->PushKey(DIK_UP))
+	else if (input_->PushKey(DIK_W))
 	{
 		move.y += kPlayerSpeed;
 	}
-	else if (input_->PushKey(DIK_DOWN))
+	else if (input_->PushKey(DIK_S))
 	{
 		move.y -= kPlayerSpeed;
 	}
@@ -89,6 +89,10 @@ void Player::Update()
 	//デバッグ用表示
 	debugText_->SetPos(0, 650);
 	debugText_->Printf("PlayerHP=%d", hp);
+	debugText_->SetPos(1000, 630);
+	debugText_->Printf("WASD:Move");
+	debugText_->SetPos(1000, 650);
+	debugText_->Printf("SPACE:Attack");
 }
 
 void Player::Draw(ViewProjection& viewProjection)
